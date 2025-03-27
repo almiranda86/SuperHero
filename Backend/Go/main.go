@@ -3,6 +3,7 @@ package main
 import (
 	"net/http"
 
+	api_configuration "github.com/almiranda86/superhero-go/ApiConfiguration"
 	"github.com/gin-gonic/gin"
 )
 
@@ -26,6 +27,9 @@ func getAlbums(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
+
+	api_configuration.DoSetup()
+
 	router.GET("/albums", getAlbums)
 
 	router.Run("localhost:8080")

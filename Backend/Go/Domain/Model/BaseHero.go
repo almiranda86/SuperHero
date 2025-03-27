@@ -25,6 +25,4 @@ func CreateBaseHero(name string, privateId string) BaseHero {
 
 type BaseHero struct {
 	BaseProperties domain_model_base.BaseModel
-
-	CreateBaseHero func(name string, privateId string)
 }
