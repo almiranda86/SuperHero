@@ -1,0 +1,33 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>net7.0</TargetFramework>
+    <ImplicitUsings>enable</ImplicitUsings>
+    <Nullable>enable</Nullable>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.3" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="7.0.3" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="7.0.3" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.DependencyInjection.Abstractions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.Extensions.Options" Version="7.0.1" />
+    <PackageReference Include="Microsoft.Extensions.Options.ConfigurationExtensions" Version="7.0.0" />
+    <PackageReference Include="Microsoft.OpenApi" Version="1.4.3" />
+    <PackageReference Include="Swashbuckle.AspNetCore" Version="6.4.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\SuperHero.ExternalService\SuperHero.ExternalService.csproj" />
+    <ProjectReference Include="..\SuperHero.Infrastructure\SuperHero.Infrastructure.csproj" />
+    <ProjectReference Include="..\SuperHero.MongoDB\SuperHero.MongoDB.csproj" />
+    <ProjectReference Include="..\SuperHero.RabitMq.Consumer\SuperHero.RabbitMq.Consumer.csproj" />
+    <ProjectReference Include="..\SuperHero.RabitMq.Publisher\SuperHero.RabbitMq.Producer.csproj" />
+    <ProjectReference Include="..\SuperHero.Redis\SuperHero.Redis.csproj" />
+    <ProjectReference Include="..\SuperHero.Repository\SuperHero.Repository.csproj" />
+    <ProjectReference Include="..\SuperHero.Security\SuperHero.Security.csproj" />
+    <ProjectReference Include="..\SuperHero.Service\SuperHero.Service.csproj" />
+  </ItemGroup>
+
+</Project>

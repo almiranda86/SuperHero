@@ -1,0 +1,75 @@
+version: '3.4'
+
+services:
+    rabbitmq:
+        image: rabbitmq:3-management
+        hostname: "rabbitmq"
+        ports: 
+            - 5672:5672 # (erlang) communication between the nodes and CLI tool
+            - 15672:15672 # communication with the web management API 
+        volumes:
+        # data persistence
+            - ~/.docker-conf/rabbitmq/data/:/var/lib/rabbitmq/
+            - ~/.docker-conf/rabbitmq/log/:/var/log/rabbitmq
+        # data mapping -> host: container
+        # queues and messages data of the container will be stored on the host
+        environment:
+            RABBITMQ_DEFAULT_USER: root
+            RABBITMQ_DEFAULT_PASS: RabMq123
+                
+    redis:
+        image: redis:6.2-alpine
+        restart: always
+        ports:
+          - '6379:6379'
+        volumes: 
+          - cache:/data                
+
+    mongo:
+        image: mongo
+        restart: always
+        environment:
+          MONGO_INITDB_ROOT_USERNAME: root
+          MONGO_INITDB_ROOT_PASSWORD: MongoDB00
+          MONGO_INITDB_DATABASE: HeroesDB
+        ports:
+          - "27017:27017"
+        volumes:
+          - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+          
+    mongo-express:
+        image: mongo-express
+        restart: always
+        ports:
+          - 8081:8081
+        environment:
+          ME_CONFIG_MONGODB_ADMINUSERNAME: root
+          ME_CONFIG_MONGODB_ADMINPASSWORD: MongoExpress00
+          ME_CONFIG_MONGODB_URL: mongodb://root:MongoDB00@mongo:27017/ 
+          
+    superhero.api:
+        container_name: superhero.api
+        image: superheroapi
+        restart: always
+        build:
+          context: .
+          dockerfile: SuperHero.API/Dockerfile
+        ports:
+           - 3500:8080
+        depends_on:
+            - rabbitmq
+            - redis
+            - mongo  
+        
+
+volumes:
+    logs-folder:
+        name: ${log_rabbitmq_management}
+        driver: local
+    cache:
+        driver: local
+
+
+#https://bartwullems.blogspot.com/2021/06/visual-studio-2019-create-docker.html
+#https://www.c-sharpcorner.com/article/hosting-net-core-web-api-images-with-docker-compose-over-https/
+#https://medium.com/@__hungrywolf/web-api-and-docker-compose-453f9b824ff9
