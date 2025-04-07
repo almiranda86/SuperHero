@@ -1,0 +1,9 @@
+version: '3.4'
+
+services:
+  superhero.api:
+    container_name: superhero.api
+    image: ${DOCKER_REGISTRY-}superheroapi
+    build:
+      context: .
+      dockerfile: SuperHero.API/Dockerfile
