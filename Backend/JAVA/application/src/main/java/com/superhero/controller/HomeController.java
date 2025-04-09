@@ -5,6 +5,8 @@ import org.springframework.web.bind.annotation.RestController;
 import com.superhero.domain.behavior.handler.IGetHeroByPublicIdHandler;
 import com.superhero.domain.behavior.repository.lookup.IBaseHeroLookup;
 import com.superhero.domain.model.BaseHero;
+import com.superhero.domain.model.custom_model.CompleteHero;
+import com.superhero.service.dto.GetHeroByPublicIdResponse;
 
 import java.util.List;
 
@@ -35,9 +37,9 @@ public class HomeController {
     }
 
     @GetMapping("/get-hero-by-publicid/{publicid}")
-    public ResponseEntity<BaseHero> GetHeroByGuid(@PathVariable String publicid){
-        BaseHero baseHero = getHeroByPublicIdHandler.GetByPublicId(publicid);       
-        return ResponseEntity.ok().body(baseHero);
+    public ResponseEntity<GetHeroByPublicIdResponse> GetHeroByGuid(@PathVariable String publicid){
+        GetHeroByPublicIdResponse hero = getHeroByPublicIdHandler.GetByPublicId(publicid);       
+        return ResponseEntity.ok().body(hero);
     }
 
 

@@ -75,5 +75,4 @@ public final class Powerstats implements Serializable{
     public void setCombat(String combat) {
         this.combat = combat;
     }
-
 }

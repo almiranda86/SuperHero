@@ -31,7 +31,6 @@ public final class Biography implements Serializable{
     public Biography() {
     }
 
-
     public String getFullName() {
         return fullName;
     }

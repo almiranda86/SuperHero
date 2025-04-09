@@ -5,7 +5,6 @@ import java.time.LocalDateTime;
 import org.springframework.http.HttpStatus;
 
 public class ServiceResponse {
-
     public LocalDateTime IssuedOn;
     public HttpStatus Status;
     public String StatusDescription;

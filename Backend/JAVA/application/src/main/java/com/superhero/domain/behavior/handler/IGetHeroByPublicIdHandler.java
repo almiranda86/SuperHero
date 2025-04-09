@@ -2,9 +2,9 @@ package com.superhero.domain.behavior.handler;
 
 import org.springframework.stereotype.Component;
 
-import com.superhero.domain.model.BaseHero;
+import com.superhero.service.dto.GetHeroByPublicIdResponse;
 
 @Component
 public interface IGetHeroByPublicIdHandler {
-    BaseHero GetByPublicId(String publicId);
+    GetHeroByPublicIdResponse GetByPublicId(String publicId);
 }
