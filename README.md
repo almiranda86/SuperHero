@@ -1,4 +1,5 @@
 The Super Hero Project
+<br />
 Here, the main idea is to use https://superheroapi.com/index.html and create the same application, with different technologies, to gain experience by doing a small API consumption project, and maybe some gamification too.
 
 At this moment all the development will be focused on the Back-end.
