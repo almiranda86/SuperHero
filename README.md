@@ -1,14 +1,20 @@
-The Super Hero Project
+<b>The Super Hero Project:</b>
 <br />
-Here, the main idea is to use https://superheroapi.com/index.html and create the same application, with different technologies, to gain experience by doing a small API consumption project, and maybe some gamification too.
+Here, the main idea is to use this open api, https://superheroapi.com/index.html, to create the same application with different technologies.
+<br />
+<b>The objective:</b>
+Gain experience by doing a real project in the best way possible, with my current knowledge at the moment.
 
-At this moment all the development will be focused on the Back-end.
-For this, I'm aiming to develop with:
 
-C#
-Java
-Go
+<b>Tech:</b>
+For now, all the development will be focused on the Back-end.
+<br />
+So, I'm aiming to develop with:<br />
 
-Next Steps:
-Add Front-end, with React and Angular
+C#<br />
+Java<br />
+Go<br />
+
+<b>Next Steps:</b><br />
+Add Front-end, with React and Angular<br />
 Add Mobile, with Kotlin Multi-Platform
