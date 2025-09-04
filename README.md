@@ -22,6 +22,7 @@ Go<br />
 Typescript<br /><br />
 
 <img width="640" height="276" alt="image" src="https://github.com/user-attachments/assets/55b28a9c-5424-47d1-ba22-dfcf2421b297" /><br />
+Improve security matters<br />
 Add Front-end, with React and Angular<br />
 Add Mobile, with Kotlin Multi-Platform<br />
 Check about K8S and GitHub actions for CI/CD
