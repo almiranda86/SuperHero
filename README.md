@@ -1,6 +1,6 @@
-**The Super Hero Project:**
+**The Super Hero Project:**<br /><br />
 Hello there!<br />
-<br />
+
 Well, with this project, my main goal is to use this open api, https://superheroapi.com/index.html, and create the same application with different technologies.
 <br /><br />
 **Why?**<br />
