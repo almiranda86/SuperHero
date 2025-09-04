@@ -11,7 +11,7 @@ For now, all the development will be focused on the Back-end.
 <br />
 So, I'm aiming to develop with:<br />
 
-[C#](Backend/C#/README.md)<br />
+[C#]([Backend/C#/README.md](https://github.com/almiranda86/SuperHero/blob/48a7dbd43ba5c7e72854ff6b23b56dd69501daaf/Backend/C%23/README.md))<br />
 Java<br />
 Go<br />
 
