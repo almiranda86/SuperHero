@@ -1,7 +1,7 @@
 **SuperHero Project - C# Version**<br />
 
 I've decided to follow Clean Architecture to do so, and I think that it's worth mentioning some points here:<br /> 
-<img width="277" height="463" alt="image" src="https://github.com/user-attachments/assets/83047498-d662-495b-9a40-cbcd0dc9b568" />
+<img width="285" height="503" alt="image" src="https://github.com/user-attachments/assets/f5cbe3c2-68d3-41cf-a7b9-bfb7f034e8d5" />
 <br />
 
 The Application layer, as intended, will have everything related to the communication with the external world. <br /> 
@@ -16,4 +16,5 @@ Means that, if I want to rewrite this in another tech stack, this Domain definit
 
 Inside the Infra, I've put everything I've considered to make sense as the foundation for the Service.<br /> 
 Which means the not usual IoC csproj, where I've done all the implementations for DI to be used inside the Api Bootstrapper.<br /> 
-<img width="329" height="780" alt="image" src="https://github.com/user-attachments/assets/d4f58840-6d74-40c6-a47e-9855bed4daa0" />
+<img width="337" height="666" alt="image" src="https://github.com/user-attachments/assets/0387748a-78ca-45b8-96cd-3717bc021893" />
+
