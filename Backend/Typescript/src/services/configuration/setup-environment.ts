@@ -1,5 +1,7 @@
-import initializeDb from "./setup-database.js";
+import { container } from "tsyringe";
+import SetupDBService from "./setup-database.js";
 
 export default async function doEnvironmentSetup() {
-    await initializeDb();
+    const setupService = container.resolve(SetupDBService);
+    await setupService.InitializeDb();
 }
