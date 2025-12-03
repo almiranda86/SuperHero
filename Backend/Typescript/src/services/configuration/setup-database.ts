@@ -8,7 +8,7 @@ export default class SetupDBService implements IInitializeDbService {
     async InitializeDb(): Promise<void> {
         try {
             const baseHeroService = container.resolve(BaseHeroService);
-            const resourceTextFilePath: string = '../../domain/resources/heroes.txt';
+            const resourceTextFilePath: string = '../Typescript/src/domain/resources/heroes.txt';
 
             const resourceFileContent: string | undefined = await readResourceTextFile(resourceTextFilePath);
             if (!resourceFileContent) {
@@ -19,6 +19,8 @@ export default class SetupDBService implements IInitializeDbService {
             if (!heroes || heroes.length === 0) {
                 throw new Error('No heroes were generated from the resource content');
             }
+            
+            console.log(`Initializing database with ${heroes.length} heroes...`);
 
             await baseHeroService.createBaseHero(heroes);
         } catch (error) {

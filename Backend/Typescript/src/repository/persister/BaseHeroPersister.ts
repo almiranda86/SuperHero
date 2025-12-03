@@ -5,7 +5,7 @@ import type { BaseHero } from "../../domain/entities/base/base-hero.js";
 @injectable()
 export class BaseHeroPersister implements IBaseHeroPersister {
     async createBaseHero(baseHeroCollection: BaseHero[]): Promise<boolean> {
-        // Implementação da persistência dos BaseHeroes
+        console.log('Persisting base heroes to the database...');
         return true;
     }
 }

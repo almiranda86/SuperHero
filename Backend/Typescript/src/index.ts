@@ -1,3 +1,5 @@
+import "reflect-metadata";
+
 import { addRepository, addServices } from './ioc/container-config.js';
 import { startServer } from './server.js';
 import doEnvironmentSetup from './services/configuration/setup-environment.js';
