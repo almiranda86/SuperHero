@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import type { IBaseHeroService } from "../domain/behavior/service/base-hero-service.interface.js";
 import type { BaseHero } from "../domain/entities/base/base-hero.js";
-import type { IBaseHeroPersister } from "../domain/behavior/repository/baase-hero-persister.interface.js";
+import type { IBaseHeroPersister } from "../domain/behavior/repository/base-hero-persister.interface.js";
 
 @injectable()
 export class BaseHeroService implements IBaseHeroService {

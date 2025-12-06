@@ -1,6 +1,6 @@
 import { container } from "tsyringe";
 import type { BaseHero } from "../../domain/entities/base/base-hero.js";
-import { BaseHeroService } from "../BaseHeroService.js";
+import { BaseHeroService } from "../base-hero.service.js";
 import { readResourceTextFile, generateHeroesFromResourceContent } from "../helper/serviceHelper.js";
 import type { IInitializeDbService } from "../../domain/behavior/initialize-db-service.interface.js";
 

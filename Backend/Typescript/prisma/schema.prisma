@@ -1,0 +1,127 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+//----MODELS----//
+
+model BaseHero {
+  id          String      @id @default(uuid())
+  privateId   Int?        @unique @map("private_id")
+  publicId    String?     @map("public_id")
+  name        String?
+}
+
+model Hero {
+  id          String      @id @default(uuid())
+  publicId    String?     @map("public_id")
+  name        String?
+
+  powerstats  Powerstats?
+  biography   Biography?
+  appearance  Appearance?
+  work        Work?
+  connections Connections?
+  image       Image?
+}
+
+model Powerstats {
+  id            String @id @default(uuid())
+  heroId        String @unique
+  hero          Hero   @relation(fields: [heroId], references: [id])
+
+  intelligence  String?
+  strength      String?
+  speed         String?
+  durability    String?
+  power         String?
+  combat        String?
+}
+
+model Biography {
+  id              String            @id @default(uuid())
+  heroId          String            @unique
+  hero            Hero              @relation(fields: [heroId], references: [id])
+
+  fullName        String?           @map("full_name")
+  alterEgos       String?           @map("alter_egos")
+  placeOfBirth    String?           @map("place_of_birth")
+  firstAppearance String?           @map("first_appearance")
+  publisher       String?
+  alignment       String?
+
+  aliases         BiographyAlias[]
+}
+
+model BiographyAlias {
+  id          String     @id @default(uuid())
+  biographyId String
+  biography   Biography  @relation(fields: [biographyId], references: [id])
+
+  value       String
+}
+
+model Appearance {
+  id        String           @id @default(uuid())
+  heroId    String           @unique
+  hero      Hero             @relation(fields: [heroId], references: [id])
+
+  gender    String?
+  race      String?
+  eyeColor  String?          @map("eye_color")
+  hairColor String?          @map("hair_color")
+
+  height    AppearanceHeight[]
+  weight    AppearanceWeight[]
+}
+
+model AppearanceHeight {
+  id           String      @id @default(uuid())
+  appearanceId String
+  appearance   Appearance  @relation(fields: [appearanceId], references: [id])
+
+  value        String
+}
+
+
+model AppearanceWeight {
+  id           String      @id @default(uuid())
+  appearanceId String
+  appearance   Appearance  @relation(fields: [appearanceId], references: [id])
+
+  value        String
+}
+
+
+model Work {
+  id               String @id @default(uuid())
+  heroId           String @unique
+  hero             Hero   @relation(fields: [heroId], references: [id])
+
+  occupation       String?
+  baseOfOperation  String? @map("base_of_operation")
+}
+
+model Connections {
+  id               String @id @default(uuid())
+  heroId           String @unique
+  hero             Hero   @relation(fields: [heroId], references: [id])
+
+  groupAffiliation String? @map("group_affiliation")
+  relatives        String?
+}
+
+model Image {
+  id     String @id @default(uuid())
+  heroId String @unique
+  hero   Hero   @relation(fields: [heroId], references: [id])
+
+  url    String?
+}
