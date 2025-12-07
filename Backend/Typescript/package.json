@@ -4,7 +4,13 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "dev": "ts-node-dev src/index.ts",
+    "prisma:init": "prisma init --datasource-provider sqlite",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:generate": "prisma generate",
+    "prisma:reset": "rm -rf node_modules/@prisma && rm -rf node_modules/.prisma && npx prisma generate && npx prisma db push",
+    "prisma:push": "prisma db push",
+    "dev": "tsx watch src/index.ts",
+    "dev:fresh": "prisma generate && npm run dev",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
@@ -12,17 +18,24 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/node": "^24.10.1",
+    "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
     "@typescript-eslint/parser": "^8.48.0",
     "eslint": "^9.39.1",
     "eslint-config-prettier": "^10.1.8",
     "eslint-plugin-prettier": "^5.5.4",
     "prettier": "^3.6.2",
-    "ts-node": "^10.9.2",
-    "ts-node-dev": "^2.0.0",
+    "prisma": "^5.22.0",
+    "tsx": "^4.20.6",
     "typescript": "^5.9.3"
   },
   "dependencies": {
-    "class-transformer": "^0.5.1"
+    "@prisma/client": "^5.22.0",
+    "class-transformer": "^0.5.1",
+    "fastify": "^5.6.2",
+    "reflect-metadata": "^0.2.2",
+    "tsyringe": "^4.10.0",
+    "uuid": "^13.0.0"
   }
 }

@@ -1,11 +1,11 @@
 import { Expose } from "class-transformer";
-import { GuidId } from "../base/guidId.js";
 import { Powerstats } from "../Powerstats.js";
 import { Biography } from "../Biography.js";
 import { Appearance } from "../Appearance.js";
 import { Work } from "../Work.js";
 import { Connections } from "../Connections.js";
 import { Image } from "../Image.js";
+import { GuidId } from "../base/guid-id.js";
 
 export class CompleteHero extends GuidId {
     @Expose({ name: "powerstats" })
