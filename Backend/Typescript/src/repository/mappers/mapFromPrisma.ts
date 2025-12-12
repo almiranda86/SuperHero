@@ -1,6 +1,16 @@
 import { CompleteHero } from "../../domain/entities/custom/complete-hero.js";
+import { BaseHero } from "../../domain/entities/base/base-hero.js";
 
-export function fromPrisma(data: any): CompleteHero {
+export function baseHeroFromPrisma(data: any): BaseHero {
+        const entity = new BaseHero(
+            data.privateId,
+            data.name
+        );
+        entity.publicId = data.publicId;
+        return entity;
+}
+
+export function completeHeroFromPrisma(data: any): CompleteHero {
   const hero = new CompleteHero();
 
   //

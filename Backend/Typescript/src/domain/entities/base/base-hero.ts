@@ -3,10 +3,10 @@ import type { GuidId } from "./guid-id.js";
 import { v4 as uuidv4, validate, version } from 'uuid';
 
 export class BaseHero implements GuidId {
-        publicId: string | undefined;
-        PrivateId: number | undefined;
+        publicId: string;
+        PrivateId: number;
         @Expose({ name: "name" })
-        Name:  string | undefined;
+        Name:  string;
 
         constructor(privateId: number, name: string) { 
             this.publicId = uuidv4();
