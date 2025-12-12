@@ -13,10 +13,10 @@ datasource db {
 //----MODELS----//
 
 model BaseHero {
-  id          String      @id @default(uuid())
-  privateId   Int?        @unique @map("private_id")
-  publicId    String?     @map("public_id")
-  name        String?
+  id        String  @id @default(uuid())
+  privateId Int     @unique @map("private_id")
+  publicId  String  @unique @map("public_id")
+  name      String
 }
 
 model Hero {

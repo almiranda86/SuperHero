@@ -1,6 +1,16 @@
+import type { BaseHero } from "../../domain/entities/base/base-hero.js";
 import type { CompleteHero } from "../../domain/entities/custom/complete-hero.js";
 
-export function toPrisma(hero: CompleteHero) {
+export function baseHeroToPrisma(hero: BaseHero) {
+        return {
+            privateId: hero.PrivateId,  // Prisma usa camelCase
+            publicId: hero.publicId,
+            name: hero.Name
+        };
+    }
+
+
+export function completeHeroToPrisma(hero: CompleteHero) {
   return {
     id: hero.publicId ?? undefined,
     publicId: hero.PublicId,
