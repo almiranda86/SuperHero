@@ -1,11 +1,12 @@
 import "reflect-metadata";
 
-import { addRepository, addServices } from './ioc/container-config.js';
+import { addEnvironmentsVariables, addRepository, addServices } from './ioc/container-config.js';
 import { startServer } from './server.js';
 import doEnvironmentSetup from './services/configuration/setup-environment.js';
 
 async function start() {
   //Runs DI container configuration
+  addEnvironmentsVariables();
   addServices();
   addRepository();
 
