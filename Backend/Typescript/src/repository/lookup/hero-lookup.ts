@@ -26,7 +26,19 @@ export class HeroLookup implements IHeroLookup {
     }
 
     async getHeroByPublicId(publicId: string ): Promise<CompleteHero> {
-        // Implementation to retrieve a CompleteHero by publicId
-        throw new Error("Method not implemented.");
+        try {
+            const hero = await this.prisma.hero.findMany({
+                where: { publicId }
+            });
+
+            if (hero.length === 0) {
+                return null as unknown as CompleteHero;
+            }
+
+            return hero[0] as CompleteHero;
+        } catch (error) {
+            console.error('[HeroLookup] Error retrieving base heroes:', error);
+            throw new Error('Failed to retrieve heroes from database');
+        }
     }
 }

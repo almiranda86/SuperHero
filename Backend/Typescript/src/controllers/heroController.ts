@@ -16,6 +16,7 @@ export class HeroController {
         request: FastifyRequest<{ Params: GetHeroByPublicIdRequest }>,
         reply: FastifyReply
     ): Promise<GetHeroByPublicIdResponse> {
+        console.log('Received request to get hero by publicId:', request.params.publicId);
         const response = await this.heroService.getHeroByPublicId(request.params);
 
          if (!response) {
