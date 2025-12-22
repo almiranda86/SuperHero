@@ -1,0 +1,182 @@
+version: '3.8'
+
+services:
+  # ==========================================
+  # RabbitMQ - Message Broker
+  # ==========================================
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: superhero-ts-rabbitmq
+    hostname: "rabbitmq"
+    restart: unless-stopped
+    ports: 
+      - "5672:5672"   # AMQP protocol port
+      - "15672:15672" # Management UI
+    volumes:
+      - rabbitmq-data:/var/lib/rabbitmq/
+      - rabbitmq-logs:/var/log/rabbitmq
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    networks:
+      - superhero-network
+    healthcheck:
+      test: ["CMD", "rabbitmq-diagnostics", "-q", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==========================================
+  # Redis - Cache Layer
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: superhero-ts-redis
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+    volumes: 
+      - redis-data:/data
+    command: redis-server --appendonly yes --requirepass "${REDIS_PASSWORD:-}"
+    networks:
+      - superhero-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==========================================
+  # MongoDB - Database
+  # ==========================================
+  mongo:
+    image: mongo:7
+    container_name: superhero-ts-mongo
+    restart: unless-stopped
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-changeme}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-HeroesDB}
+      MONGO_APP_USER: ${MONGO_APP_USER:-superhero_app}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:-changeme}
+    volumes:
+      - mongo-data:/data/db
+      - mongo-config:/data/configdb
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - superhero-network
+    healthcheck:
+      test: ["CMD", "mongosh", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ==========================================
+  # Mongo Express - Database UI (Optional)
+  # ==========================================
+  mongo-express:
+    image: mongo-express:latest
+    container_name: superhero-ts-mongo-express
+    restart: unless-stopped
+    ports:
+      - "8081:8081"
+    environment:
+      ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-changeme}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-changeme}@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS:-changeme}
+    depends_on:
+      mongo:
+        condition: service_healthy
+    networks:
+      - superhero-network
+
+  # ==========================================
+  # SuperHero TypeScript API
+  # ==========================================
+  superhero-api:
+    image: superhero-api-ts:latest
+    container_name: superhero-ts-api
+    restart: unless-stopped
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: production
+    ports:
+      - "3000:3000"
+    environment:
+      # Server
+      NODE_ENV: production
+      PORT: 3000
+      LOG_LEVEL: info
+      
+      # Database
+      DATABASE_URL: file:./dev.db
+      
+      # Hero API
+      HERO_API_TOKEN: ${HERO_API_TOKEN:-your_token_here}
+      HERO_API_URL: ${HERO_API_URL:-https://superheroapi.com/api/}
+      
+      # Redis
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_DB: 0
+      
+      # RabbitMQ (para futura implementação)
+      RABBITMQ_HOST: rabbitmq
+      RABBITMQ_PORT: 5672
+      RABBITMQ_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    volumes:
+      - ./prisma:/app/prisma
+      - api-data:/app/data
+    depends_on:
+      redis:
+        condition: service_healthy
+      mongo:
+        condition: service_healthy
+      rabbitmq:
+        condition: service_healthy
+    networks:
+      - superhero-network
+    healthcheck:
+      test: ["CMD", "node", "-e", "require('http').get('http://localhost:3000', (r) => {process.exit(r.statusCode === 200 ? 0 : 1)})"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 40s
+
+# ==========================================
+# Networks
+# ==========================================
+networks:
+  superhero-network:
+    driver: bridge
+    name: superhero-network
+
+# ==========================================
+# Volumes
+# ==========================================
+volumes:
+  rabbitmq-data:
+    driver: local
+    name: superhero-ts-rabbitmq-data
+  rabbitmq-logs:
+    driver: local
+    name: superhero-ts-rabbitmq-logs
+  redis-data:
+    driver: local
+    name: superhero-ts-redis-data
+  mongo-data:
+    driver: local
+    name: superhero-ts-mongo-data
+  mongo-config:
+    driver: local
+    name: superhero-ts-mongo-config
+  api-data:
+    driver: local
+    name: superhero-ts-api-data

@@ -17,6 +17,25 @@ const envSchema = z.object({
     PORT: z.string().default('3000').transform(Number),
     NODE_ENV: z.enum(['development', 'production', 'test']).default('development'),
     LOG_LEVEL: z.enum(['debug', 'info', 'warn', 'error']).default('info'),
+
+    //Redis
+    REDIS_HOST: z.string().default('localhost'),
+    REDIS_PORT: z.string().default('6379').transform(Number),
+    REDIS_PASSWORD: z.string().optional(),
+    REDIS_DB: z.string().default('0').transform(Number),
+
+    // MongoDB (optional, for MongoDB connection)
+    MONGODB_URI: z.string().optional(),
+
+    // RabbitMQ (optional, for future implementation)
+    RABBITMQ_HOST: z.string().optional(),
+    RABBITMQ_PORT: z.string().optional().transform(val => val ? Number(val) : undefined),
+    RABBITMQ_USER: z.string().optional(),
+    RABBITMQ_PASS: z.string().optional(),
+
+    // Mongo Express (optional, for development UI)
+    MONGO_EXPRESS_USER: z.string().optional(),
+    MONGO_EXPRESS_PASS: z.string().optional(),
 });
 
 // Validate and export

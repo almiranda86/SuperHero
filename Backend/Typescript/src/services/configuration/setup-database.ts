@@ -3,12 +3,18 @@ import type { BaseHero } from "../../domain/entities/base/base-hero.js";
 import { BaseHeroService } from "../base-hero.service.js";
 import { readResourceTextFile, generateHeroesFromResourceContent } from "../helper/serviceHelper.js";
 import type { IInitializeDbService } from "../../domain/behavior/initialize-db-service.interface.js";
+import { fileURLToPath } from 'url';
+import { dirname, join } from 'path';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = dirname(__filename);
 
 export default class SetupDBService implements IInitializeDbService {
     async InitializeDb(): Promise<void> {
         try {
             const baseHeroService = container.resolve(BaseHeroService);
-            const resourceTextFilePath: string = '../Typescript/src/domain/resources/heroes.txt';
+            // Use path relativo ao arquivo atual que funciona em qualquer ambiente
+            const resourceTextFilePath = join(__dirname, '../../domain/resources/heroes.txt');
 
             const resourceFileContent: string | undefined = await readResourceTextFile(resourceTextFilePath);
             if (!resourceFileContent) {

@@ -8,6 +8,8 @@ import { HeroService } from "../services/hero.service.js";
 import { BaseHeroLookup } from "../repository/lookup/base-hero.lookup.js";
 import { ExternalApiLookup } from "../external-service/external-api-lookup.js";
 import { env } from "../env.js";
+import { CacheService } from "../services/cache/cache.service.js";
+import { createRedisClient } from "../services/configuration/setup-redis.js";
 
 export function addEnvironmentsVariables(): void {
     container.register('HeroApiToken', {
@@ -23,6 +25,12 @@ export function addServices(): void {
     container.register("IInitializeDbService", { useClass: SetupDBService });
     container.register("IBaseHeroService", { useClass: BaseHeroService });
     container.register("IHeroService", { useClass: HeroService });
+    container.register("ICacheService", { useClass: CacheService });
+
+    const redis = createRedisClient();
+    container.register('RedisClient', {
+        useValue: redis
+    });
 }
 
 export function addRepository(): void {
