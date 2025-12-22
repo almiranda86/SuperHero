@@ -18,6 +18,7 @@
   "license": "ISC",
   "description": "",
   "devDependencies": {
+    "@types/ioredis": "^4.28.10",
     "@types/node": "^24.10.4",
     "@types/uuid": "^10.0.0",
     "@typescript-eslint/eslint-plugin": "^8.48.0",
@@ -36,6 +37,7 @@
     "class-transformer": "^0.5.1",
     "dotenv": "^17.2.3",
     "fastify": "^5.6.2",
+    "ioredis": "^5.8.2",
     "reflect-metadata": "^0.2.2",
     "tsyringe": "^4.10.0",
     "uuid": "^13.0.0",

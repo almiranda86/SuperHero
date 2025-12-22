@@ -1,0 +1,112 @@
+# Docker Compose for Development
+# This file includes hot-reload and debugging capabilities
+# Usage: docker-compose -f docker-compose.dev.yml up
+
+version: '3.8'
+
+services:
+  # ==========================================
+  # RabbitMQ - Message Broker
+  # ==========================================
+  rabbitmq:
+    image: rabbitmq:3-management-alpine
+    container_name: superhero-ts-rabbitmq-dev
+    ports: 
+      - "5672:5672"
+      - "15672:15672"
+    environment:
+      RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+      RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
+    networks:
+      - superhero-network
+
+  # ==========================================
+  # Redis - Cache Layer
+  # ==========================================
+  redis:
+    image: redis:7-alpine
+    container_name: superhero-ts-redis-dev
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes
+    networks:
+      - superhero-network
+
+  # ==========================================
+  # MongoDB - Database
+  # ==========================================
+  mongo:
+    image: mongo:7
+    container_name: superhero-ts-mongo-dev
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+      MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-changeme}
+      MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-HeroesDB}
+      MONGO_APP_USER: ${MONGO_APP_USER:-superhero_app}
+      MONGO_APP_PASSWORD: ${MONGO_APP_PASSWORD:-changeme}
+      MONGO_INITDB_DATABASE: HeroesDB
+    volumes:
+      - ./mongo-init.js:/docker-entrypoint-initdb.d/mongo-init.js:ro
+    networks:
+      - superhero-network
+
+  # ==========================================
+  # Mongo Express - Database UI
+  # ==========================================
+  mongo-express:
+    image: mongo-express:latest
+    container_name: superhero-ts-mongo-express-dev
+    ports:${MONGO_INITDB_ROOT_USERNAME:-root}
+      ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-changeme}
+      ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-changeme}@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: ${MONGO_EXPRESS_USER:-admin}
+      ME_CONFIG_BASICAUTH_PASSWORD: ${MONGO_EXPRESS_PASS:-changeme}DB00
+      ME_CONFIG_MONGODB_URL: mongodb://root:MongoDB00@mongo:27017/
+      ME_CONFIG_BASICAUTH_USERNAME: admin
+      ME_CONFIG_BASICAUTH_PASSWORD: admin123
+    depends_on:
+      - mongo
+    networks:
+      - superhero-network
+
+  # ==========================================
+  # SuperHero TypeScript API (Development)
+  # ==========================================
+  superhero-api-dev:
+    build:
+      context: .
+      dockerfile: Dockerfile
+      target: development
+    container_name: superhero-ts-api-dev
+    ports:
+      - "3000:3000"
+    environment:
+      NODE_ENV: development
+      PORT: 3000
+      LOG_LEVEL: debug
+      DATABASE_URL: file:./dev.db
+      HERO_API_TOKEN: ${HERO_API_TOKEN:-your_token_here}
+      HERO_API_URL: ${HERO_API_URL:-https://superheroapi.com/api/}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      REDIS_PASSWORD: ${REDIS_PASSWORD:-}
+      REDIS_DB: 0
+    volumes:
+      # Mount source code for hot-reload
+      - ./src:/app/src:ro
+      - ./prisma:/app/prisma
+      # Prevent overwriting node_modules
+      - /app/node_modules
+    depends_on:
+      - redis
+      - mongo
+      - rabbitmq
+    networks:
+      - superhero-network
+    command: npm run dev
+
+networks:
+  superhero-network:
+    driver: bridge
