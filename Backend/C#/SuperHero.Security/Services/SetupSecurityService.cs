@@ -44,7 +44,7 @@ namespace SuperHero.Service
                 var resultado = await _roleManager.CreateAsync(new IdentityRole(role));
                 if (!resultado.Succeeded)
                 {
-                    throw new Exception($"Erro durante a criação da role {role}.");
+                    throw new Exception($"Error during role creation: {role}.");
                 }
             }
         }

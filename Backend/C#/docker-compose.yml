@@ -14,8 +14,8 @@ services:
         # data mapping -> host: container
         # queues and messages data of the container will be stored on the host
         environment:
-            RABBITMQ_DEFAULT_USER: root
-            RABBITMQ_DEFAULT_PASS: RabMq123
+            RABBITMQ_DEFAULT_USER: ${RABBITMQ_DEFAULT_USER:-guest}
+            RABBITMQ_DEFAULT_PASS: ${RABBITMQ_DEFAULT_PASS:-guest}
                 
     redis:
         image: redis:6.2-alpine
@@ -29,9 +29,9 @@ services:
         image: mongo
         restart: always
         environment:
-          MONGO_INITDB_ROOT_USERNAME: root
-          MONGO_INITDB_ROOT_PASSWORD: MongoDB00
-          MONGO_INITDB_DATABASE: HeroesDB
+          MONGO_INITDB_ROOT_USERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+          MONGO_INITDB_ROOT_PASSWORD: ${MONGO_INITDB_ROOT_PASSWORD:-changeme}
+          MONGO_INITDB_DATABASE: ${MONGO_INITDB_DATABASE:-HeroesDB}
         ports:
           - "27017:27017"
         volumes:
@@ -43,9 +43,9 @@ services:
         ports:
           - 8081:8081
         environment:
-          ME_CONFIG_MONGODB_ADMINUSERNAME: root
-          ME_CONFIG_MONGODB_ADMINPASSWORD: MongoExpress00
-          ME_CONFIG_MONGODB_URL: mongodb://root:MongoDB00@mongo:27017/ 
+          ME_CONFIG_MONGODB_ADMINUSERNAME: ${MONGO_INITDB_ROOT_USERNAME:-root}
+          ME_CONFIG_MONGODB_ADMINPASSWORD: ${MONGO_EXPRESS_PASSWORD:-changeme}
+          ME_CONFIG_MONGODB_URL: mongodb://${MONGO_INITDB_ROOT_USERNAME:-root}:${MONGO_INITDB_ROOT_PASSWORD:-changeme}@mongo:27017/ 
           
     superhero.api:
         container_name: superhero.api
